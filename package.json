@@ -1,0 +1,19 @@
+{
+  "name": "gameframework",
+  "version": "1.0.0",
+  "description": "a tiny multiplayer game framework for nodejs",
+  "main": "main.js",
+  "scripts": {
+    "test": "main.js"
+  },
+  "keywords": [
+    "tiny",
+    "game",
+    "server"
+  ],
+  "author": "banhtieu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
