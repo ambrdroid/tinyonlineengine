@@ -5,6 +5,9 @@
         "sourceMap": true,
         "experimentalDecorators": true
     },
+    "exclude": [
+        "node_modules"
+    ],
     "filesGlob" : [
         "./typings/**/*.d.ts"
     ]

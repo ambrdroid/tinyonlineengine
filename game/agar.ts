@@ -1,21 +1,20 @@
 
 import engine = require("./engine")
 
-
 /**
  * The agar body game object
  */
-@engine.type("AgarBody")
+@engine.type
 export class AgarBody extends engine.GameObject {
     
     @engine.server
     position: engine.Vector2
     
     @engine.server
-    maxVelocity: number = 0.0
+    maxVelocity: number
     
     @engine.server
-    point: number = 0
+    point: number
     
     @engine.server
     isAlive: boolean
@@ -26,8 +25,10 @@ export class AgarBody extends engine.GameObject {
     /**
      * initialize
      */
-    init() {
+    init() {        
         if (this.isLocalPlayer) {
+            this.maxVelocity = 0
+            this.point = 0
             document.body.onmousemove = this.mouseEvent.bind(this)
         }
     }
@@ -72,3 +73,5 @@ export class AgarServerGame extends engine.ServerGame {
         agarBody.owner = player.id
     }
 }
+
+

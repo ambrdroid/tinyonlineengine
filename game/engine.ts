@@ -1,4 +1,4 @@
-export function server(target: GameObject, propertyName: string) {
+export function server(target: any, propertyName: string) {
     if (target.serverVars === undefined) {
         target.serverVars = []
     }
@@ -6,7 +6,7 @@ export function server(target: GameObject, propertyName: string) {
     target.serverVars.push(propertyName)
 }
 
-export function client(target: GameObject, propertyName: string) {
+export function client(target: any, propertyName: string) {
     if (target.clientVars === undefined) {
         target.clientVars = []
     }
@@ -17,10 +17,8 @@ export function client(target: GameObject, propertyName: string) {
 /**
  * server type @decorator
  */
-export function type(type: string) {
-    return function(target: Function) {
-        target.prototype.className = type
-    }
+export function type(target: any) {
+    target.className = target.name
 }
 
 // vector 2
@@ -88,23 +86,12 @@ export class GameObject {
     /**
      * Check if this object is local player's object
      */
-    isLocalPlayer: boolean = false
+    isLocalPlayer: boolean
     
     /**
-     * Server variable
+     * Changed variable
      */
-    serverVars: string[]
-    
-    /**
-     * Client variable
-     */
-    clientVars: string[]
-    
-    /**
-     * Create an object
-     */
-    constructor() {
-    }
+    changedSet: any = {}
     
     /**
      * Initialize 
@@ -140,6 +127,47 @@ export class GameObject {
     render(canvas: CanvasRenderingContext2D) {
     }
     
+    
+    /**
+     * Start watching on server
+     */
+    startWatchingServer() {
+        var proto = this["__proto__"]
+        this.watchFields(proto.serverVars)
+    }
+    
+    /**
+     * Start watching on client
+     */
+    startWatchingClient() {
+        var proto = this["__proto__"]
+        this.watchFields(proto.clientVars)
+    }
+    
+    /**
+     * Start watching fields
+     */
+    watchFields(fields: string[]) {
+        for (var i = 0; i < fields.length; i++) {
+            this.watchField(fields[i])
+        }
+    }
+    
+    /**
+     * 
+     */
+    watchField(field: string) {
+            
+        Object.defineProperty(this, field, {
+            get: function() {
+                return this["_" + field]
+            },
+            set: function(value) {
+                this["_" + field] = value
+                this.changedSet[field] = value
+            }
+        })
+    }
 }
 
 /**
