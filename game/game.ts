@@ -5,7 +5,8 @@ import agar = require("./agar")
  * Main function
  */
 function main() {
-    console.log("Ready for gaming??")
+    var canvas = document.getElementById("canvas") as HTMLCanvasElement
+    var context = canvas.getContext("2d")
 }
 
 
